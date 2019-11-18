@@ -378,20 +378,25 @@ export default {
         var aux = 0;
         var base;
         var limite;
-        for (const item of self.arrMemoriaFisica.filter(i => i.byte === "")) {
+        const memoriaFisicaLivre = self.arrMemoriaFisica.filter(
+          i => i.byte === ""
+        );
+        for (var m = 0; m < memoriaFisicaLivre.length; m++) {
           if (aux === 0) {
             //base
-            base = item.endereco;
+            base = memoriaFisicaLivre[m].endereco;
           }
           for (var i = aux; i < arr.length; i++) {
-            item.byte = arr[i].bytes;
+            memoriaFisicaLivre[m].byte = arr[i].bytes;
             aux++;
             break;
           }
-          item.corFundo = corFundo;
+          memoriaFisicaLivre[m].corFundo = corFundo;
           if (aux == arr.length) {
             //limite
-            limite = item.endereco;
+            if (m === memoriaFisicaLivre.length - 1)
+              limite = memoriaFisicaLivre[m].endereco;
+            else limite = memoriaFisicaLivre[m + 1].endereco;
             break;
           }
         }
