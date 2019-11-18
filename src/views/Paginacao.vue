@@ -280,7 +280,7 @@ export default {
           byte: ""
         },
         {
-          endereco: "1010",
+          endereco: "1011",
           byte: ""
         },
         {
