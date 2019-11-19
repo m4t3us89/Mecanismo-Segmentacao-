@@ -86,110 +86,36 @@
                     <h6 v-if="arrProcesso.length === 0">Segmentos</h6>
                     <span v-if="arrProcesso.length > 0">
                       <h6>Segmento 00 - Código</h6>
-                      <table class="table table-borderless table-memoria-fisica">
-                        <thead>
-                          <tr>
-                            <th>Segmento</th>
-                            <th>Deslocamento</th>
-                            <th>Bytes</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in arrProcesso[processoSelecionado].codigo.segmentos"
-                            :bgcolor="arrProcesso[processoSelecionado].codigo.corFundo"
-                          >
-                            <td></td>
-                            <td>{{ item.deslocamento }}</td>
-                            <td>{{ item.bytes }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <Table
+                        :arrDados=" arrProcesso[processoSelecionado].codigo.segmentos"
+                        :arrColunas="['Segmento','Deslocamento', 'Bytes']"
+                        :corFundo="arrProcesso[processoSelecionado].codigo.corFundo"
+                      />
                       <h6>Segmento 01 - Dados</h6>
-                      <table class="table table-borderless table-memoria-fisica">
-                        <thead>
-                          <tr>
-                            <th>Segmento</th>
-                            <th>Deslocamento</th>
-                            <th>Bytes</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in arrProcesso[processoSelecionado].dado.segmentos"
-                            :bgcolor="arrProcesso[processoSelecionado].dado.corFundo"
-                          >
-                            <td></td>
-                            <td>{{ item.deslocamento }}</td>
-                            <td>{{ item.bytes }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <Table
+                        :arrDados=" arrProcesso[processoSelecionado].dado.segmentos"
+                        :arrColunas="['Segmento','Deslocamento', 'Bytes']"
+                        :corFundo="arrProcesso[processoSelecionado].dado.corFundo"
+                      />
                       <h6>Segmento 10 - Pilha</h6>
-                      <table class="table table-borderless table-memoria-fisica">
-                        <thead>
-                          <tr>
-                            <th>Segmento</th>
-                            <th>Deslocamento</th>
-                            <th>Bytes</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in arrProcesso[processoSelecionado].pilha.segmentos"
-                            :bgcolor="arrProcesso[processoSelecionado].pilha.corFundo"
-                          >
-                            <td></td>
-                            <td>{{ item.deslocamento }}</td>
-                            <td>{{ item.bytes }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
+                      <Table
+                        :arrDados=" arrProcesso[processoSelecionado].pilha.segmentos"
+                        :arrColunas="['Segmento','Deslocamento', 'Bytes']"
+                        :corFundo="arrProcesso[processoSelecionado].pilha.corFundo"
+                      />
                     </span>
                   </div>
                   <div class="col-lg-4 pl-1">
                     <h6>Tabela de Segmentos</h6>
-                    <span v-if="arrTabelaSegmentos.length > 0">
-                      <table class="table table-borderless table-memoria-fisica">
-                        <thead>
-                          <tr>
-                            <th>Segmento</th>
-                            <th>Base</th>
-                            <th>Limite</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr
-                            v-for="item in arrTabelaSegmentos[processoSelecionado]"
-                            :bgcolor="item.corFundo"
-                          >
-                            <td>{{ item.segmento }}</td>
-                            <td>{{ item.base }}</td>
-                            <td>{{ item.limite }}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                    </span>
+                    <Table
+                      v-if="arrTabelaSegmentos.length > 0"
+                      :arrDados="arrTabelaSegmentos[processoSelecionado]"
+                      :arrColunas="['Segmento','Base', 'Limite']"
+                    />
                   </div>
                   <div class="col-lg-4 pl-1">
                     <h6>Memória Física</h6>
-                    <table class="table table-borderless table-memoria-fisica">
-                      <thead>
-                        <tr>
-                          <th>Endereço</th>
-                          <th>Byte</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr
-                          v-for="item in arrMemoriaFisica"
-                          :bgcolor="item.byte !== '' ? item.corFundo : '#f0e68c' "
-                        >
-                          <td>{{ item.endereco }}</td>
-                          <td>{{ item.byte }}</td>
-                        </tr>
-                      </tbody>
-                    </table>
+                    <Table :arrDados="arrMemoriaFisica" :arrColunas="['Endereço','Byte']" />
                   </div>
                 </div>
               </div>
@@ -203,8 +129,11 @@
 </template>
 
 <script>
+import Table from "../components/Table";
+
 export default {
   name: "paginacao",
+  components: { Table },
   data: function() {
     return {
       processoSelecionado: 0,
@@ -359,6 +288,8 @@ export default {
       var arrSegmento = [];
       var objAux = {};
       for (var i = 0; i < numberTamanho; i++) {
+        objAux.segmento = "";
+        objAux.deslocamento = this.arrMemoriaFisica[i].endereco;
         if (strSegmento === "codigo") {
           objAux.bytes = "C" + (i + 1);
         } else if (strSegmento === "dado") {
@@ -366,7 +297,6 @@ export default {
         } else if (strSegmento === "pilha") {
           objAux.bytes = "P" + (i + 1);
         }
-        objAux.deslocamento = this.arrMemoriaFisica[i].endereco;
         arrSegmento.push(objAux);
         objAux = {};
       }
@@ -473,19 +403,6 @@ export default {
 </script>
 
 <style scoped>
-.table {
-  font-size: 14px;
-  text-align: center;
-}
-td {
-  padding: 0;
-  margin: 0;
-  font-weight: bold;
-}
-.table-memoria-fisica {
-  background-color: #f0e68c;
-  width: 80%;
-}
 .distancia-botao-processos {
   margin-right: 2px;
 }
