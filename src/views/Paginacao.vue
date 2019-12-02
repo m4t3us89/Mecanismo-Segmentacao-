@@ -381,12 +381,15 @@ export default {
       return cor;
     },
     validaCampo(event) {
-      if (event.target.value <= 0) {
+      const ref = event.target
+      if (ref.value <= 0) {
         alert(
-          `Campo "${event.target.name.toUpperCase()}" deve ser maior que zero.`
+          `Campo "${ref.name.toUpperCase()}" deve ser maior que zero.`
         );
-        event.target.value =
-          event.target.value <= 0 ? null : event.target.value;
+        ref.value =
+          ref.value <= 0 ? null : ref.value;
+
+        ref.focus()
       }
     },
     limparCampos() {
